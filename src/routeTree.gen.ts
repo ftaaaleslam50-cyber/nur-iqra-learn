@@ -20,6 +20,14 @@ import { Route as AuthenticatedLessonsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAnnouncementsRouteImport } from './routes/_authenticated/announcements'
 import { Route as AuthenticatedQuizzesIdRouteImport } from './routes/_authenticated/quizzes.$id'
+import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin.students'
+import { Route as AuthenticatedAdminScheduleRouteImport } from './routes/_authenticated/admin.schedule'
+import { Route as AuthenticatedAdminQuizzesRouteImport } from './routes/_authenticated/admin.quizzes'
+import { Route as AuthenticatedAdminPointsRouteImport } from './routes/_authenticated/admin.points'
+import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
+import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
+import { Route as AuthenticatedAdminAttendanceRouteImport } from './routes/_authenticated/admin.attendance'
+import { Route as AuthenticatedAdminAnnouncementsRouteImport } from './routes/_authenticated/admin.announcements'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -77,6 +85,54 @@ const AuthenticatedQuizzesIdRoute = AuthenticatedQuizzesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedQuizzesRoute,
 } as any)
+const AuthenticatedAdminStudentsRoute =
+  AuthenticatedAdminStudentsRouteImport.update({
+    id: '/admin/students',
+    path: '/admin/students',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminScheduleRoute =
+  AuthenticatedAdminScheduleRouteImport.update({
+    id: '/admin/schedule',
+    path: '/admin/schedule',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminQuizzesRoute =
+  AuthenticatedAdminQuizzesRouteImport.update({
+    id: '/admin/quizzes',
+    path: '/admin/quizzes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminPointsRoute =
+  AuthenticatedAdminPointsRouteImport.update({
+    id: '/admin/points',
+    path: '/admin/points',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminCoursesRoute =
+  AuthenticatedAdminCoursesRouteImport.update({
+    id: '/admin/courses',
+    path: '/admin/courses',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminCertificatesRoute =
+  AuthenticatedAdminCertificatesRouteImport.update({
+    id: '/admin/certificates',
+    path: '/admin/certificates',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAttendanceRoute =
+  AuthenticatedAdminAttendanceRouteImport.update({
+    id: '/admin/attendance',
+    path: '/admin/attendance',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAnnouncementsRoute =
+  AuthenticatedAdminAnnouncementsRouteImport.update({
+    id: '/admin/announcements',
+    path: '/admin/announcements',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,6 +144,14 @@ export interface FileRoutesByFullPath {
   '/quizzes': typeof AuthenticatedQuizzesRouteWithChildren
   '/schedule': typeof AuthenticatedScheduleRoute
   '/transcripts': typeof AuthenticatedTranscriptsRoute
+  '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/admin/quizzes': typeof AuthenticatedAdminQuizzesRoute
+  '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/quizzes/$id': typeof AuthenticatedQuizzesIdRoute
 }
 export interface FileRoutesByTo {
@@ -100,6 +164,14 @@ export interface FileRoutesByTo {
   '/quizzes': typeof AuthenticatedQuizzesRouteWithChildren
   '/schedule': typeof AuthenticatedScheduleRoute
   '/transcripts': typeof AuthenticatedTranscriptsRoute
+  '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/admin/quizzes': typeof AuthenticatedAdminQuizzesRoute
+  '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/quizzes/$id': typeof AuthenticatedQuizzesIdRoute
 }
 export interface FileRoutesById {
@@ -114,6 +186,14 @@ export interface FileRoutesById {
   '/_authenticated/quizzes': typeof AuthenticatedQuizzesRouteWithChildren
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/transcripts': typeof AuthenticatedTranscriptsRoute
+  '/_authenticated/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/_authenticated/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/_authenticated/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/_authenticated/admin/quizzes': typeof AuthenticatedAdminQuizzesRoute
+  '/_authenticated/admin/schedule': typeof AuthenticatedAdminScheduleRoute
+  '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/_authenticated/quizzes/$id': typeof AuthenticatedQuizzesIdRoute
 }
 export interface FileRouteTypes {
@@ -128,6 +208,14 @@ export interface FileRouteTypes {
     | '/quizzes'
     | '/schedule'
     | '/transcripts'
+    | '/admin/announcements'
+    | '/admin/attendance'
+    | '/admin/certificates'
+    | '/admin/courses'
+    | '/admin/points'
+    | '/admin/quizzes'
+    | '/admin/schedule'
+    | '/admin/students'
     | '/quizzes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -140,6 +228,14 @@ export interface FileRouteTypes {
     | '/quizzes'
     | '/schedule'
     | '/transcripts'
+    | '/admin/announcements'
+    | '/admin/attendance'
+    | '/admin/certificates'
+    | '/admin/courses'
+    | '/admin/points'
+    | '/admin/quizzes'
+    | '/admin/schedule'
+    | '/admin/students'
     | '/quizzes/$id'
   id:
     | '__root__'
@@ -153,6 +249,14 @@ export interface FileRouteTypes {
     | '/_authenticated/quizzes'
     | '/_authenticated/schedule'
     | '/_authenticated/transcripts'
+    | '/_authenticated/admin/announcements'
+    | '/_authenticated/admin/attendance'
+    | '/_authenticated/admin/certificates'
+    | '/_authenticated/admin/courses'
+    | '/_authenticated/admin/points'
+    | '/_authenticated/admin/quizzes'
+    | '/_authenticated/admin/schedule'
+    | '/_authenticated/admin/students'
     | '/_authenticated/quizzes/$id'
   fileRoutesById: FileRoutesById
 }
@@ -241,6 +345,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuizzesIdRouteImport
       parentRoute: typeof AuthenticatedQuizzesRoute
     }
+    '/_authenticated/admin/students': {
+      id: '/_authenticated/admin/students'
+      path: '/admin/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AuthenticatedAdminStudentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/schedule': {
+      id: '/_authenticated/admin/schedule'
+      path: '/admin/schedule'
+      fullPath: '/admin/schedule'
+      preLoaderRoute: typeof AuthenticatedAdminScheduleRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/quizzes': {
+      id: '/_authenticated/admin/quizzes'
+      path: '/admin/quizzes'
+      fullPath: '/admin/quizzes'
+      preLoaderRoute: typeof AuthenticatedAdminQuizzesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/points': {
+      id: '/_authenticated/admin/points'
+      path: '/admin/points'
+      fullPath: '/admin/points'
+      preLoaderRoute: typeof AuthenticatedAdminPointsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/courses': {
+      id: '/_authenticated/admin/courses'
+      path: '/admin/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AuthenticatedAdminCoursesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/certificates': {
+      id: '/_authenticated/admin/certificates'
+      path: '/admin/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/attendance': {
+      id: '/_authenticated/admin/attendance'
+      path: '/admin/attendance'
+      fullPath: '/admin/attendance'
+      preLoaderRoute: typeof AuthenticatedAdminAttendanceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/announcements': {
+      id: '/_authenticated/admin/announcements'
+      path: '/admin/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AuthenticatedAdminAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -263,6 +423,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedQuizzesRoute: typeof AuthenticatedQuizzesRouteWithChildren
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedTranscriptsRoute: typeof AuthenticatedTranscriptsRoute
+  AuthenticatedAdminAnnouncementsRoute: typeof AuthenticatedAdminAnnouncementsRoute
+  AuthenticatedAdminAttendanceRoute: typeof AuthenticatedAdminAttendanceRoute
+  AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
+  AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
+  AuthenticatedAdminPointsRoute: typeof AuthenticatedAdminPointsRoute
+  AuthenticatedAdminQuizzesRoute: typeof AuthenticatedAdminQuizzesRoute
+  AuthenticatedAdminScheduleRoute: typeof AuthenticatedAdminScheduleRoute
+  AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -273,6 +441,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedQuizzesRoute: AuthenticatedQuizzesRouteWithChildren,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedTranscriptsRoute: AuthenticatedTranscriptsRoute,
+  AuthenticatedAdminAnnouncementsRoute: AuthenticatedAdminAnnouncementsRoute,
+  AuthenticatedAdminAttendanceRoute: AuthenticatedAdminAttendanceRoute,
+  AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
+  AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
+  AuthenticatedAdminPointsRoute: AuthenticatedAdminPointsRoute,
+  AuthenticatedAdminQuizzesRoute: AuthenticatedAdminQuizzesRoute,
+  AuthenticatedAdminScheduleRoute: AuthenticatedAdminScheduleRoute,
+  AuthenticatedAdminStudentsRoute: AuthenticatedAdminStudentsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
