@@ -15,8 +15,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCoursesRouteImport } from './routes/_authenticated/courses'
+import { Route as AuthenticatedBooksRouteImport } from './routes/_authenticated/books'
 import { Route as AuthenticatedAssignmentsRouteImport } from './routes/_authenticated/assignments'
 import { Route as AuthenticatedAnnouncementsRouteImport } from './routes/_authenticated/announcements'
+import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated/lessons.$id'
+import { Route as AuthenticatedCoursesIdRouteImport } from './routes/_authenticated/courses.$id'
+import { Route as AuthenticatedAttendanceScanRouteImport } from './routes/_authenticated/attendance.scan'
 import { Route as AuthenticatedAssignmentsIdRouteImport } from './routes/_authenticated/assignments.$id'
 import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin.students'
 import { Route as AuthenticatedAdminScheduleRouteImport } from './routes/_authenticated/admin.schedule'
@@ -56,6 +61,16 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCoursesRoute = AuthenticatedCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBooksRoute = AuthenticatedBooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAssignmentsRoute =
   AuthenticatedAssignmentsRouteImport.update({
     id: '/assignments',
@@ -66,6 +81,22 @@ const AuthenticatedAnnouncementsRoute =
   AuthenticatedAnnouncementsRouteImport.update({
     id: '/announcements',
     path: '/announcements',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
+  id: '/lessons/$id',
+  path: '/lessons/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCoursesIdRoute = AuthenticatedCoursesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedCoursesRoute,
+} as any)
+const AuthenticatedAttendanceScanRoute =
+  AuthenticatedAttendanceScanRouteImport.update({
+    id: '/attendance/scan',
+    path: '/attendance/scan',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAssignmentsIdRoute =
@@ -128,6 +159,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/announcements': typeof AuthenticatedAnnouncementsRoute
   '/assignments': typeof AuthenticatedAssignmentsRouteWithChildren
+  '/books': typeof AuthenticatedBooksRoute
+  '/courses': typeof AuthenticatedCoursesRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schedule': typeof AuthenticatedScheduleRoute
@@ -140,12 +173,17 @@ export interface FileRoutesByFullPath {
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
+  '/attendance/scan': typeof AuthenticatedAttendanceScanRoute
+  '/courses/$id': typeof AuthenticatedCoursesIdRoute
+  '/lessons/$id': typeof AuthenticatedLessonsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/announcements': typeof AuthenticatedAnnouncementsRoute
   '/assignments': typeof AuthenticatedAssignmentsRouteWithChildren
+  '/books': typeof AuthenticatedBooksRoute
+  '/courses': typeof AuthenticatedCoursesRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schedule': typeof AuthenticatedScheduleRoute
@@ -158,6 +196,9 @@ export interface FileRoutesByTo {
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
+  '/attendance/scan': typeof AuthenticatedAttendanceScanRoute
+  '/courses/$id': typeof AuthenticatedCoursesIdRoute
+  '/lessons/$id': typeof AuthenticatedLessonsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -166,6 +207,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/announcements': typeof AuthenticatedAnnouncementsRoute
   '/_authenticated/assignments': typeof AuthenticatedAssignmentsRouteWithChildren
+  '/_authenticated/books': typeof AuthenticatedBooksRoute
+  '/_authenticated/courses': typeof AuthenticatedCoursesRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
@@ -178,6 +221,9 @@ export interface FileRoutesById {
   '/_authenticated/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/_authenticated/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
+  '/_authenticated/attendance/scan': typeof AuthenticatedAttendanceScanRoute
+  '/_authenticated/courses/$id': typeof AuthenticatedCoursesIdRoute
+  '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -186,6 +232,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/announcements'
     | '/assignments'
+    | '/books'
+    | '/courses'
     | '/dashboard'
     | '/profile'
     | '/schedule'
@@ -198,12 +246,17 @@ export interface FileRouteTypes {
     | '/admin/schedule'
     | '/admin/students'
     | '/assignments/$id'
+    | '/attendance/scan'
+    | '/courses/$id'
+    | '/lessons/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/announcements'
     | '/assignments'
+    | '/books'
+    | '/courses'
     | '/dashboard'
     | '/profile'
     | '/schedule'
@@ -216,6 +269,9 @@ export interface FileRouteTypes {
     | '/admin/schedule'
     | '/admin/students'
     | '/assignments/$id'
+    | '/attendance/scan'
+    | '/courses/$id'
+    | '/lessons/$id'
   id:
     | '__root__'
     | '/'
@@ -223,6 +279,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/announcements'
     | '/_authenticated/assignments'
+    | '/_authenticated/books'
+    | '/_authenticated/courses'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/_authenticated/schedule'
@@ -235,6 +293,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/schedule'
     | '/_authenticated/admin/students'
     | '/_authenticated/assignments/$id'
+    | '/_authenticated/attendance/scan'
+    | '/_authenticated/courses/$id'
+    | '/_authenticated/lessons/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,6 +348,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/courses': {
+      id: '/_authenticated/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof AuthenticatedCoursesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/books': {
+      id: '/_authenticated/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof AuthenticatedBooksRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/assignments': {
       id: '/_authenticated/assignments'
       path: '/assignments'
@@ -299,6 +374,27 @@ declare module '@tanstack/react-router' {
       path: '/announcements'
       fullPath: '/announcements'
       preLoaderRoute: typeof AuthenticatedAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lessons/$id': {
+      id: '/_authenticated/lessons/$id'
+      path: '/lessons/$id'
+      fullPath: '/lessons/$id'
+      preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/courses/$id': {
+      id: '/_authenticated/courses/$id'
+      path: '/$id'
+      fullPath: '/courses/$id'
+      preLoaderRoute: typeof AuthenticatedCoursesIdRouteImport
+      parentRoute: typeof AuthenticatedCoursesRoute
+    }
+    '/_authenticated/attendance/scan': {
+      id: '/_authenticated/attendance/scan'
+      path: '/attendance/scan'
+      fullPath: '/attendance/scan'
+      preLoaderRoute: typeof AuthenticatedAttendanceScanRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/assignments/$id': {
@@ -381,9 +477,22 @@ const AuthenticatedAssignmentsRouteWithChildren =
     AuthenticatedAssignmentsRouteChildren,
   )
 
+interface AuthenticatedCoursesRouteChildren {
+  AuthenticatedCoursesIdRoute: typeof AuthenticatedCoursesIdRoute
+}
+
+const AuthenticatedCoursesRouteChildren: AuthenticatedCoursesRouteChildren = {
+  AuthenticatedCoursesIdRoute: AuthenticatedCoursesIdRoute,
+}
+
+const AuthenticatedCoursesRouteWithChildren =
+  AuthenticatedCoursesRoute._addFileChildren(AuthenticatedCoursesRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAnnouncementsRoute: typeof AuthenticatedAnnouncementsRoute
   AuthenticatedAssignmentsRoute: typeof AuthenticatedAssignmentsRouteWithChildren
+  AuthenticatedBooksRoute: typeof AuthenticatedBooksRoute
+  AuthenticatedCoursesRoute: typeof AuthenticatedCoursesRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
@@ -395,11 +504,15 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminPointsRoute: typeof AuthenticatedAdminPointsRoute
   AuthenticatedAdminScheduleRoute: typeof AuthenticatedAdminScheduleRoute
   AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
+  AuthenticatedAttendanceScanRoute: typeof AuthenticatedAttendanceScanRoute
+  AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAnnouncementsRoute: AuthenticatedAnnouncementsRoute,
   AuthenticatedAssignmentsRoute: AuthenticatedAssignmentsRouteWithChildren,
+  AuthenticatedBooksRoute: AuthenticatedBooksRoute,
+  AuthenticatedCoursesRoute: AuthenticatedCoursesRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
@@ -411,6 +524,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPointsRoute: AuthenticatedAdminPointsRoute,
   AuthenticatedAdminScheduleRoute: AuthenticatedAdminScheduleRoute,
   AuthenticatedAdminStudentsRoute: AuthenticatedAdminStudentsRoute,
+  AuthenticatedAttendanceScanRoute: AuthenticatedAttendanceScanRoute,
+  AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
