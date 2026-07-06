@@ -25,9 +25,11 @@ import { Route as AuthenticatedAttendanceScanRouteImport } from './routes/_authe
 import { Route as AuthenticatedAssignmentsIdRouteImport } from './routes/_authenticated/assignments.$id'
 import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin.students'
 import { Route as AuthenticatedAdminScheduleRouteImport } from './routes/_authenticated/admin.schedule'
+import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin.questions'
 import { Route as AuthenticatedAdminPointsRouteImport } from './routes/_authenticated/admin.points'
 import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
 import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
+import { Route as AuthenticatedAdminBooksRouteImport } from './routes/_authenticated/admin.books'
 import { Route as AuthenticatedAdminAttendanceRouteImport } from './routes/_authenticated/admin.attendance'
 import { Route as AuthenticatedAdminAssignmentsRouteImport } from './routes/_authenticated/admin.assignments'
 import { Route as AuthenticatedAdminAnnouncementsRouteImport } from './routes/_authenticated/admin.announcements'
@@ -117,6 +119,12 @@ const AuthenticatedAdminScheduleRoute =
     path: '/admin/schedule',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminQuestionsRoute =
+  AuthenticatedAdminQuestionsRouteImport.update({
+    id: '/admin/questions',
+    path: '/admin/questions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPointsRoute =
   AuthenticatedAdminPointsRouteImport.update({
     id: '/admin/points',
@@ -135,6 +143,11 @@ const AuthenticatedAdminCertificatesRoute =
     path: '/admin/certificates',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminBooksRoute = AuthenticatedAdminBooksRouteImport.update({
+  id: '/admin/books',
+  path: '/admin/books',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminAttendanceRoute =
   AuthenticatedAdminAttendanceRouteImport.update({
     id: '/admin/attendance',
@@ -167,9 +180,11 @@ export interface FileRoutesByFullPath {
   '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
   '/admin/assignments': typeof AuthenticatedAdminAssignmentsRoute
   '/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/admin/books': typeof AuthenticatedAdminBooksRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
@@ -190,9 +205,11 @@ export interface FileRoutesByTo {
   '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
   '/admin/assignments': typeof AuthenticatedAdminAssignmentsRoute
   '/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/admin/books': typeof AuthenticatedAdminBooksRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
@@ -215,9 +232,11 @@ export interface FileRoutesById {
   '/_authenticated/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
   '/_authenticated/admin/assignments': typeof AuthenticatedAdminAssignmentsRoute
   '/_authenticated/admin/attendance': typeof AuthenticatedAdminAttendanceRoute
+  '/_authenticated/admin/books': typeof AuthenticatedAdminBooksRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/_authenticated/admin/points': typeof AuthenticatedAdminPointsRoute
+  '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/_authenticated/assignments/$id': typeof AuthenticatedAssignmentsIdRoute
@@ -240,9 +259,11 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/assignments'
     | '/admin/attendance'
+    | '/admin/books'
     | '/admin/certificates'
     | '/admin/courses'
     | '/admin/points'
+    | '/admin/questions'
     | '/admin/schedule'
     | '/admin/students'
     | '/assignments/$id'
@@ -263,9 +284,11 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/assignments'
     | '/admin/attendance'
+    | '/admin/books'
     | '/admin/certificates'
     | '/admin/courses'
     | '/admin/points'
+    | '/admin/questions'
     | '/admin/schedule'
     | '/admin/students'
     | '/assignments/$id'
@@ -287,9 +310,11 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/announcements'
     | '/_authenticated/admin/assignments'
     | '/_authenticated/admin/attendance'
+    | '/_authenticated/admin/books'
     | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/courses'
     | '/_authenticated/admin/points'
+    | '/_authenticated/admin/questions'
     | '/_authenticated/admin/schedule'
     | '/_authenticated/admin/students'
     | '/_authenticated/assignments/$id'
@@ -418,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminScheduleRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/questions': {
+      id: '/_authenticated/admin/questions'
+      path: '/admin/questions'
+      fullPath: '/admin/questions'
+      preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/points': {
       id: '/_authenticated/admin/points'
       path: '/admin/points'
@@ -437,6 +469,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/certificates'
       fullPath: '/admin/certificates'
       preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/books': {
+      id: '/_authenticated/admin/books'
+      path: '/admin/books'
+      fullPath: '/admin/books'
+      preLoaderRoute: typeof AuthenticatedAdminBooksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/attendance': {
@@ -499,9 +538,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAnnouncementsRoute: typeof AuthenticatedAdminAnnouncementsRoute
   AuthenticatedAdminAssignmentsRoute: typeof AuthenticatedAdminAssignmentsRoute
   AuthenticatedAdminAttendanceRoute: typeof AuthenticatedAdminAttendanceRoute
+  AuthenticatedAdminBooksRoute: typeof AuthenticatedAdminBooksRoute
   AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
   AuthenticatedAdminPointsRoute: typeof AuthenticatedAdminPointsRoute
+  AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminScheduleRoute: typeof AuthenticatedAdminScheduleRoute
   AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
   AuthenticatedAttendanceScanRoute: typeof AuthenticatedAttendanceScanRoute
@@ -519,9 +560,11 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAnnouncementsRoute: AuthenticatedAdminAnnouncementsRoute,
   AuthenticatedAdminAssignmentsRoute: AuthenticatedAdminAssignmentsRoute,
   AuthenticatedAdminAttendanceRoute: AuthenticatedAdminAttendanceRoute,
+  AuthenticatedAdminBooksRoute: AuthenticatedAdminBooksRoute,
   AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
   AuthenticatedAdminPointsRoute: AuthenticatedAdminPointsRoute,
+  AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
   AuthenticatedAdminScheduleRoute: AuthenticatedAdminScheduleRoute,
   AuthenticatedAdminStudentsRoute: AuthenticatedAdminStudentsRoute,
   AuthenticatedAttendanceScanRoute: AuthenticatedAttendanceScanRoute,
