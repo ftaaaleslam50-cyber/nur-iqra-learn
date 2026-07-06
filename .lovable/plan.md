@@ -1,80 +1,98 @@
-# Arabic Islamic Academy LMS — Build Plan
+# LMS Restructuring Plan
 
-A private LMS in Arabic (RTL), green & white palette, with two roles (Student, Admin). Frontend-only for now, with a clean data-access layer designed to plug into Google Apps Script + Google Sheets later.
-
-## Scope of this build
-
-- Full Arabic RTL UI, responsive (desktop / tablet / mobile), dark mode toggle.
-- Login page only (no public registration). Two demo accounts seeded in mock data:
-  - Admin: `admin` / `admin123`
-  - Student: `student` / `student123`
-- Auth stored in `localStorage` (temporary — will be swapped for Apps Script auth later).
-- All data comes from a single `src/lib/api.ts` layer with typed functions (`getStudents`, `getLessons`, `submitQuiz`, etc.) backed by mock JSON. Swapping to `fetch()` against Apps Script later = one-file change.
-
-## Design
-
-- Palette: emerald green primary, off-white background, soft neutrals. Dark mode = deep slate + emerald accents.
-- Typography: Cairo (headings) + Tajawal (body) loaded via `<link>` in `__root.tsx`.
-- Layout: fixed RTL sidebar (right side), top bar with user menu + dark mode toggle, content area with cards.
-- shadcn components themed via tokens in `src/styles.css`. Smooth transitions, subtle hover lifts.
-
-## Routes
-
-```
-/login                              → Login page (public)
-/_authenticated/                    → Layout gate (role check)
-  /dashboard                        → Student or Admin dashboard (role-based)
-  /lessons                          → Student: lessons by course + YouTube embed + attachments
-  /transcripts                      → Student: per-lesson transcripts + PDF/DOC download
-  /schedule                         → Student: weekly schedule + exams + events
-  /quizzes                          → Student: quiz list
-  /quizzes/$id                      → Quiz taking (timer, MCQ, auto-grade)
-  /announcements                    → Student: announcements feed
-  /profile                          → Student: info + change password
-  /admin/students                   → CRUD students
-  /admin/courses                    → CRUD courses + lessons + attachments + transcripts
-  /admin/schedule                   → CRUD schedule
-  /admin/quizzes                    → CRUD quizzes
-  /admin/attendance                 → Record attendance
-  /admin/points                     → Award/remove points
-  /admin/certificates               → Issue certificates
-  /admin/announcements              → CRUD announcements
-```
-
-## Student dashboard cards
-
-Name + photo, current course, attendance %, absences count, progress %, reward points, certificates earned, latest quiz results, latest announcements.
-
-## Admin dashboard stats
-
-Total students, overall attendance rate, total lessons, total quizzes, recent activity feed.
-
-## Data layer (Google Sheets ready)
-
-`src/lib/api.ts` exports async functions returning typed data. Internally reads/writes an in-memory store seeded from `src/lib/mock-data.ts` and persisted to `localStorage`. Every function matches a future Apps Script `doGet`/`doPost` action name, e.g.:
-
-```
-api.students.list()      → GET  ?action=students.list
-api.students.create(x)   → POST { action: 'students.create', payload: x }
-api.quizzes.submit(...)  → POST { action: 'quizzes.submit', payload: ... }
-```
-
-A single `API_BASE` constant + `USE_MOCK` flag will flip the whole app to the real backend later. A `README-BACKEND.md` will document the expected Apps Script endpoints and Sheet columns.
-
-## Tech
-
-- TanStack Start (already scaffolded) + TypeScript + Tailwind v4 + shadcn.
-- TanStack Query for data fetching.
-- `react-hook-form` + `zod` for forms.
-- `recharts` for admin stats (already installed via shadcn chart).
-- No backend enabled — pure frontend. Auth is client-side mock until Apps Script is wired.
-
-## Out of scope (this pass)
-
-- Real Apps Script integration (documented, not wired).
-- Real file uploads (attachments use URLs).
-- Email/SMS notifications.
+Keep all existing styling, colors, RTL layout, sidebar, and auth. This is a **functionality + information architecture** refactor only. Still mock-backed via `src/lib/api.ts` + localStorage (no Cloud yet — the mock layer already mirrors future backend action names).
 
 ---
 
-Confirm and I'll build it. If you'd rather I wire Lovable Cloud (Supabase) for real auth + storage instead of preparing for Google Apps Script, say so and I'll switch — Cloud is much more robust than Sheets for an LMS.
+## 1. Navigation & page renames
+
+Sidebar labels change; routes get renamed/added. No visual redesign.
+
+| Old | New | Route |
+|---|---|---|
+| لوحة التحكم (dashboard) | التقدم والإنجازات (Progress & Achievements) | `/dashboard` (kept as URL, title changes) |
+| الدروس (Lessons flat list) | الدورات (Courses → Lessons drilldown) | `/courses`, `/courses/$id` |
+| المفكرات (Transcripts) | **removed** — merged into Lesson page | — |
+| الاختبارات (Quizzes) | الواجبات والاختبارات (Assignments & Exams) | `/assignments` |
+| — new — | الكتب (Books) | `/books` |
+| — new — | مسح الحضور (Scan Attendance) | `/attendance/scan` |
+
+Admin panel gains: Books, Question Bank, Lesson Resources (inline inside Lesson edit), Assignments (replaces Quizzes admin).
+
+---
+
+## 2. Data model changes (`src/lib/types.ts` + `mock-data.ts`)
+
+New/updated types:
+
+- **Course** gains: `coverImage`, `startDate`, `endDate`, `status: 'active' | 'upcoming' | 'completed'`.
+- **Lesson** gains: `audioUrl?`, `notes`, `homework: Attachment[]`, `resources: Attachment[]`, `scheduledAt?` (for upcoming/recent).
+  Attachments already exist; extend `Attachment.type` to include `ppt | audio | zip`.
+- **Book** *(new)*: `id, title, author, category, coverUrl?, fileUrl, description`.
+- **AttendanceRecord** gains: `lessonId`, adds status `late`.
+- **AttendanceSession** *(new)*: `id, lessonId, code, expiresAt, open`.
+- **Assignment** *(new, replaces Quiz)*: `id, courseId, kind: 'assignment' | 'quiz' | 'exam', title, description, instructions, availableAt, dueAt, closesAt, totalMarks, timeLimitMin?, attachments, visible, questions: Question[]`.
+- **Question** *(new)*: `id, type: 'mcq' | 'multi' | 'tf' | 'short' | 'paragraph' | 'fill', prompt, options?, correct?, marks`.
+- **Submission** *(new)*: `id, assignmentId, studentId, answers, autoScore, manualScore?, finalScore?, gradedAt?, submittedAt`.
+
+`api.ts` gets matching namespaces: `api.books`, `api.attendanceSessions`, `api.assignments`, `api.submissions`. Existing `api.quizzes` is kept as thin alias for now to avoid breaking old code, then removed.
+
+File "uploads": since we're mock-only, uploaded files are stored as base64 data URLs in localStorage (small files only) — UI presents a proper upload widget so swapping to real storage later is a one-liner. A note is added to `README-BACKEND.md`.
+
+---
+
+## 3. Page-by-page work
+
+### `/dashboard` — Progress & Achievements
+Rewrite the page to show all the requested widgets in the existing card grid style:
+profile header, active courses list, overall progress bar, per-course progress, attendance donut (present/late/absent + %), attendance history table, quiz/assignment grades table, certificates, points, latest announcements, recent + upcoming lessons, upcoming exams, quick-action buttons (Scan attendance, Open assignments, Open courses).
+
+### `/courses` + `/courses/$id`
+- `/courses`: grid of course cards (cover, dates, status badge, lesson & student count).
+- `/courses/$id`: header + list of lessons in order → each links to `/lessons/$id`.
+- Delete flat `/lessons` route; keep `/lessons/$id` for the lesson detail page.
+
+### `/lessons/$id` — Lesson page
+Sections: YouTube embed, description, transcript, notes, attachments, audio recording, homework, additional resources. Each file list uses the same list component. Preview modal for PDF/image/audio; download button for the rest. No separate transcripts page.
+
+### `/books`
+Grid grouped by category with search. Card = cover + title + author + preview/download.
+
+### `/assignments`
+List assignments/quizzes/exams with type badge, due date, status (not started / in progress / submitted / graded). Detail page `/assignments/$id` renders the appropriate question inputs, handles time limit, auto-saves answers, submits → auto-grade objective parts, queue subjective for admin.
+
+### Attendance (per lesson)
+- Admin: on lesson page → "بدء جلسة حضور" opens a modal showing a QR (encodes `session:<id>`, 60s countdown, regenerate & close buttons).
+- Student: `/attendance/scan` uses camera via `html5-qrcode`; on scan → `api.attendanceSessions.checkIn(code)` → returns Present/Late based on how long the session has been open.
+- Admin CRUD in `/admin/attendance` for manual edits (kept, extended with lesson & late status).
+
+---
+
+## 4. Admin panel updates
+
+- **Students, Courses, Certificates, Announcements** — kept, minor field additions (Course gains cover/dates/status form).
+- **Lessons** — new admin page `/admin/lessons` (or accessible via course edit) to manage lessons + all their file lists (upload, rename, replace, delete, reorder via up/down buttons).
+- **Books** — new `/admin/books` CRUD.
+- **Assignments** — replaces `/admin/quizzes`; add question builder (all 6 types) + question bank at `/admin/questions`.
+- **Attendance** — extended with per-lesson filter + late status.
+
+---
+
+## 5. Technical notes
+
+- Dependencies to add: `qrcode.react` (render QR), `html5-qrcode` (scan QR).
+- File storage in mock: base64 data-URL in localStorage. Warn user in `README-BACKEND.md` that real uploads require Cloud/Storage — offered as follow-up.
+- Route renames update `routeTree.gen.ts` automatically via the plugin; delete removed route files.
+- Sidebar (`app-sidebar.tsx`) gets the new labels/order. No color, font, or layout change.
+- All new pages reuse existing `AppLayout`, `Card`, `Tabs`, `Button`, badges — no new design tokens.
+
+---
+
+## Out of scope (ask later)
+
+- Real file storage / real backend (Google Apps Script or Lovable Cloud).
+- Email/SMS notifications, camera permission fallbacks beyond a manual code input.
+- Rich text editor for lesson notes (plain textarea for now).
+- Anti-cheat / IP-locked exams.
+
+Confirm and I'll build it. If you'd like real file uploads (Books PDFs, lesson attachments, audio) working properly instead of stored as base64 in the browser, say the word and I'll enable **Lovable Cloud** first so storage + auth + DB are ready.
