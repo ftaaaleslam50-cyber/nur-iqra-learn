@@ -16,14 +16,12 @@ const SESSION_KEY = "lms:session:v1";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(null);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
       if (raw) setUser(JSON.parse(raw) as SessionUser);
     } catch {}
-    setReady(true);
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
@@ -43,9 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     logout,
   };
-
-  // Avoid hydration flicker: render children only once we've read localStorage
-  if (!ready) return null;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
