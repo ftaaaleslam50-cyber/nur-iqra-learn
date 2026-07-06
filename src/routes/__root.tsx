@@ -91,6 +91,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "أكاديمية النور — منصة التعلم الإسلامي" },
+      { name: "description", content: "منصة تعليمية خاصة للأكاديمية الإسلامية: دروس ومسابقات وشهادات ومتابعة الطلاب." },
+      { property: "og:description", content: "منصة تعليمية خاصة للأكاديمية الإسلامية: دروس ومسابقات وشهادات ومتابعة الطلاب." },
+      { name: "twitter:description", content: "منصة تعليمية خاصة للأكاديمية الإسلامية: دروس ومسابقات وشهادات ومتابعة الطلاب." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79853374-f00d-4306-aac3-79bc2e3469bb/id-preview-04e38a28--6e44c3dc-a15b-49cf-a0ee-31cca4d51bbd.lovable.app-1783313735154.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79853374-f00d-4306-aac3-79bc2e3469bb/id-preview-04e38a28--6e44c3dc-a15b-49cf-a0ee-31cca4d51bbd.lovable.app-1783313735154.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
