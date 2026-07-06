@@ -16,7 +16,7 @@ import {
 import { api } from "@/lib/api";
 import type { QuizQuestion } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/admin/quizzes")({
+export const Route = createFileRoute("/_authenticated/admin/assignments")({
   head: () => ({ meta: [{ title: "إدارة الاختبارات — أكاديمية النور" }] }),
   component: AdminQuizzesPage,
 });

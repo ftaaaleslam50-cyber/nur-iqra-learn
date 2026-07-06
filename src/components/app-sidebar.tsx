@@ -2,11 +2,11 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BookOpen,
   CalendarDays,
-  FileText,
   GraduationCap,
-  LayoutDashboard,
+  Library,
   LogOut,
   Megaphone,
+  QrCode,
   UserCog,
   Users,
   ClipboardCheck,
@@ -15,6 +15,8 @@ import {
   Trophy,
   BookMarked,
   Sparkles,
+  Trophy as TrophyIcon,
+  HelpCircle,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,21 +36,24 @@ import { Button } from "@/components/ui/button";
 type Item = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
 
 const studentItems: Item[] = [
-  { title: "لوحة التحكم", url: "/dashboard", icon: LayoutDashboard },
-  { title: "الدروس", url: "/lessons", icon: BookOpen },
-  { title: "النصوص المكتوبة", url: "/transcripts", icon: FileText },
+  { title: "التقدم والإنجازات", url: "/dashboard", icon: TrophyIcon },
+  { title: "الدورات", url: "/courses", icon: BookOpen },
+  { title: "الواجبات والاختبارات", url: "/assignments", icon: BookMarked },
+  { title: "الكتب", url: "/books", icon: Library },
+  { title: "مسح الحضور", url: "/attendance/scan", icon: QrCode },
   { title: "الجدول الدراسي", url: "/schedule", icon: CalendarDays },
-  { title: "الاختبارات", url: "/quizzes", icon: BookMarked },
   { title: "الإعلانات", url: "/announcements", icon: Megaphone },
   { title: "الملف الشخصي", url: "/profile", icon: UserCog },
 ];
 
 const adminItems: Item[] = [
-  { title: "لوحة التحكم", url: "/dashboard", icon: LayoutDashboard },
+  { title: "لوحة التحكم", url: "/dashboard", icon: TrophyIcon },
   { title: "الطلاب", url: "/admin/students", icon: Users },
-  { title: "الدورات والدروس", url: "/admin/courses", icon: BookOpen },
+  { title: "الدورات", url: "/admin/courses", icon: BookOpen },
+  { title: "الكتب", url: "/admin/books", icon: Library },
   { title: "الجدول الدراسي", url: "/admin/schedule", icon: CalendarDays },
-  { title: "الاختبارات", url: "/admin/quizzes", icon: BookMarked },
+  { title: "الواجبات والاختبارات", url: "/admin/assignments", icon: BookMarked },
+  { title: "بنك الأسئلة", url: "/admin/questions", icon: HelpCircle },
   { title: "الحضور", url: "/admin/attendance", icon: ClipboardCheck },
   { title: "النقاط", url: "/admin/points", icon: Star },
   { title: "الشهادات", url: "/admin/certificates", icon: Trophy },
@@ -85,7 +90,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const active = pathname === item.url;
+                const active = pathname === item.url || pathname.startsWith(item.url + "/");
                 return (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
@@ -131,8 +136,5 @@ export function AppSidebar() {
   );
 }
 
-export { studentItems, adminItems };
+export { studentItems, adminItems, Award };
 export type { Item };
-
-// icon re-exports for convenience
-export { Award };

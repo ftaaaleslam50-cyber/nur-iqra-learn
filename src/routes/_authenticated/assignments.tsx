@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/_authenticated/quizzes")({
+export const Route = createFileRoute("/_authenticated/assignments")({
   head: () => ({ meta: [{ title: "الاختبارات — أكاديمية النور" }] }),
   component: QuizzesPage,
 });

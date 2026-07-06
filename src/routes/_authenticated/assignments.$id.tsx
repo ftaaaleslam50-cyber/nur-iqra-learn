@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/_authenticated/quizzes/$id")({
+export const Route = createFileRoute("/_authenticated/assignments/$id")({
   head: () => ({ meta: [{ title: "اختبار — أكاديمية النور" }] }),
   component: QuizPage,
 });
