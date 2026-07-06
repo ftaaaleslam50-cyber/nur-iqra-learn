@@ -7,69 +7,84 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import type { AssignmentKind } from "@/lib/types";
 
 export const Route = createFileRoute("/_authenticated/assignments")({
-  head: () => ({ meta: [{ title: "الاختبارات — أكاديمية النور" }] }),
-  component: QuizzesPage,
+  head: () => ({ meta: [{ title: "الواجبات والاختبارات — أكاديمية النور" }] }),
+  component: AssignmentsPage,
 });
 
-function QuizzesPage() {
+const kindLabel = (k: AssignmentKind) =>
+  k === "assignment" ? "واجب" : k === "quiz" ? "اختبار قصير" : "امتحان";
+const kindClass = (k: AssignmentKind) =>
+  k === "assignment" ? "bg-primary/10 text-primary" :
+  k === "quiz" ? "bg-warning/15 text-warning" :
+  "bg-destructive/10 text-destructive";
+
+function AssignmentsPage() {
   const { user } = useAuth();
-  const quizzes = useQuery({ queryKey: ["quizzes"], queryFn: api.quizzes.list });
-  const results = useQuery({
-    queryKey: ["results", user?.id],
-    queryFn: () => api.quizzes.resultsForStudent(user!.id),
+  const assignments = useQuery({ queryKey: ["assignments"], queryFn: api.assignments.list });
+  const subs = useQuery({
+    queryKey: ["submissions", user?.id],
+    queryFn: () => api.submissions.forStudent(user!.id),
     enabled: !!user,
   });
 
-  const resultFor = (quizId: string) =>
-    (results.data ?? []).filter((r) => r.quizId === quizId).sort((a, b) => b.submittedAt.localeCompare(a.submittedAt))[0];
+  const subFor = (aid: string) =>
+    (subs.data ?? []).filter((s) => s.assignmentId === aid)
+      .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt))[0];
+
+  const visible = (assignments.data ?? []).filter((a) => a.visible);
 
   return (
-    <AppLayout title="الاختبارات">
+    <AppLayout title="الواجبات والاختبارات">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {(quizzes.data ?? []).map((q) => {
-          const r = resultFor(q.id);
+        {visible.map((a) => {
+          const sub = subFor(a.id);
           return (
-            <Card key={q.id} className="card-hover flex flex-col">
+            <Card key={a.id} className="card-hover flex flex-col">
               <CardHeader>
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-soft">
-                  <BookMarked className="h-6 w-6" />
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="mb-1 flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-soft">
+                    <BookMarked className="h-6 w-6" />
+                  </div>
+                  <Badge className={kindClass(a.kind)}>{kindLabel(a.kind)}</Badge>
                 </div>
-                <CardTitle>{q.title}</CardTitle>
-                <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                <CardTitle>{a.title}</CardTitle>
+                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{a.description}</p>
+                <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                  {a.timeLimitMin && (
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> {a.timeLimitMin} دقيقة
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {q.durationMinutes} دقيقة
+                    <HelpCircle className="h-3 w-3" /> {a.questions.length} سؤال
                   </span>
-                  <span className="inline-flex items-center gap-1">
-                    <HelpCircle className="h-3 w-3" />
-                    {q.questions.length} سؤال
-                  </span>
+                  <span>الدرجة: {a.totalMarks}</span>
+                  {a.dueAt && <span>الاستحقاق: {new Date(a.dueAt).toLocaleDateString("ar")}</span>}
                 </div>
               </CardHeader>
               <CardContent className="mt-auto space-y-3">
-                {r && (
+                {sub && (
                   <div className="flex items-center justify-between rounded-lg border bg-muted/30 p-3 text-sm">
                     <span className="inline-flex items-center gap-2 font-semibold">
                       <Trophy className="h-4 w-4 text-warning" />
-                      آخر نتيجة
+                      {sub.finalScore == null ? "بانتظار التصحيح" : "آخر نتيجة"}
                     </span>
-                    <Badge
-                      className={
-                        r.score / r.total >= 0.6
-                          ? "bg-success text-success-foreground"
-                          : "bg-destructive text-destructive-foreground"
-                      }
-                    >
-                      {r.score} / {r.total}
+                    <Badge className={
+                      sub.finalScore == null ? "bg-muted text-foreground" :
+                      sub.finalScore / a.totalMarks >= 0.6 ? "bg-success text-success-foreground" :
+                      "bg-destructive text-destructive-foreground"
+                    }>
+                      {(sub.finalScore ?? sub.autoScore)} / {a.totalMarks}
                     </Badge>
                   </div>
                 )}
                 <Button asChild className="w-full gradient-primary text-primary-foreground">
-                  <Link to="/quizzes/$id" params={{ id: q.id }}>
+                  <Link to="/assignments/$id" params={{ id: a.id }}>
                     <PlayCircle className="me-1 h-4 w-4" />
-                    {r ? "إعادة الاختبار" : "بدء الاختبار"}
+                    {sub ? "فتح" : "بدء"}
                   </Link>
                 </Button>
               </CardContent>
